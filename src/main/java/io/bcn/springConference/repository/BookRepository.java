@@ -2,6 +2,7 @@ package io.bcn.springConference.repository;
 
 import io.bcn.springConference.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, String> {
+public interface BookRepository extends JpaRepository<Book, UUID> {
 }
