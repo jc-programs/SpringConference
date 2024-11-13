@@ -17,6 +17,7 @@ public class Speaker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String bio;
 
 //    @ManyToOne
 //    @JoinColumn(name = "conference_id")
