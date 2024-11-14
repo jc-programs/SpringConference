@@ -32,4 +32,11 @@ public class Conference {
     private int duration;
     private String room;
 
+    @ManyToOne
+    @JoinColumn(name="book_id", nullable = false)
+    private Book book;
+    @ManyToOne
+    @JoinColumn(name="speaker_id", nullable = false)
+    private Speaker speaker;
+
 }
