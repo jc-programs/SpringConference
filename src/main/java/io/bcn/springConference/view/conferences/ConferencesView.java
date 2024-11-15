@@ -8,16 +8,21 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.PropertyId;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import io.bcn.springConference.model.Book;
 import io.bcn.springConference.model.Conference;
+import io.bcn.springConference.model.Speaker;
+import io.bcn.springConference.repository.BookRepository;
 import io.bcn.springConference.repository.ConferenceRepository;
+import io.bcn.springConference.repository.SpeakerRepository;
 import io.bcn.springConference.utilities.Views;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +36,13 @@ public class ConferencesView extends Composite<VerticalLayout> {
 
     @Autowired
     ConferenceRepository conferenceRepository;
+
+    @Autowired
+    BookRepository bookRepository;
+
+    @Autowired
+    SpeakerRepository speakerRepository;
+
     private final Grid<Conference> conferencesGrid;
 
     private final TextField textFieldConference;
@@ -40,6 +52,11 @@ public class ConferencesView extends Composite<VerticalLayout> {
     private final TextField textFieldContent;
     private final IntegerField integerFieldDuration;
     private final TextField textFieldRoom;
+
+    @PropertyId("book")
+    private final Select<Book> selectBook;
+    @PropertyId("Speaker")
+    private final Select<Speaker> selectSpeaker;
 
     private final Binder<Conference> binder;
 
@@ -53,6 +70,13 @@ public class ConferencesView extends Composite<VerticalLayout> {
         textFieldRoom = new TextField("Room");
         conferencesGrid = getConferencesGrid();
 
+        selectBook = new Select<>();
+        selectBook.setLabel("Book");
+        selectBook.setItemLabelGenerator(Book::getTitle);
+        selectSpeaker = new Select<>();
+        selectSpeaker.setLabel("Speaker");
+        selectSpeaker.setItemLabelGenerator(Speaker::getName);
+
         conferencesGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         conferencesGrid.setWidth("100%");
         conferencesGrid.getStyle().set("flex-grow", "0");
@@ -64,7 +88,7 @@ public class ConferencesView extends Composite<VerticalLayout> {
         getContent().add(getRow2ConferenceFields());
         getContent().add(getRowConferenceButtons());
 
-        binder = new Binder<>(Conference.class);
+        binder = new Binder<>(Conference.class, true);
         binder.bind(textFieldConference, Conference::getConference, Conference::setConference);
         binder.bind(textFieldTitle, Conference::getTitle, Conference::setTitle);
         binder.bind(datePickerDate, Conference::getDate, Conference::setDate);
@@ -72,11 +96,14 @@ public class ConferencesView extends Composite<VerticalLayout> {
         binder.bind(textFieldContent, Conference::getContent, Conference::setContent);
         binder.bind(integerFieldDuration, Conference::getDuration, Conference::setDuration);
         binder.bind(textFieldRoom, Conference::getRoom, Conference::setRoom);
+        binder.bind(selectBook, Conference::getBook, Conference::setBook);
+        binder.bind(selectSpeaker, Conference::getSpeaker, Conference::setSpeaker);
 
         conferencesGrid.asSingleSelect().addValueChangeListener(
                 event ->{
-                    if(event.getValue() != null){
-                        binder.setBean(event.getValue());
+                    Conference conference = event.getValue();
+                    if(conference != null){
+                        binder.setBean(conference);
                     } else{
                         clearConferenceForm();
                     }
@@ -85,7 +112,6 @@ public class ConferencesView extends Composite<VerticalLayout> {
     }
 
     private Grid<Conference> getConferencesGrid(){
-//        Grid<Conference> grid = new Grid<>(Conference.class);
         Grid<Conference> grid = new Grid<>(Conference.class,false);
 
         Grid.Column<Conference> col = grid.addColumn(Conference::getId);
@@ -115,6 +141,16 @@ public class ConferencesView extends Composite<VerticalLayout> {
     private void setGridData() {
         if (conferenceRepository != null) {
             conferencesGrid.setItems(conferenceRepository.findAll());
+        }
+    }
+
+    @PostConstruct
+    private void setSelectsData() {
+        if (bookRepository != null) {
+            selectBook.setItems(bookRepository.findAll());
+        }
+        if (speakerRepository != null) {
+            selectSpeaker.setItems(speakerRepository.findAll());
         }
     }
 
@@ -171,6 +207,8 @@ public class ConferencesView extends Composite<VerticalLayout> {
         row.add(textFieldContent);
         row.add(integerFieldDuration);
         row.add(textFieldRoom);
+        row.add(selectBook);
+        row.add(selectSpeaker);
 
         return row;
     }
