@@ -5,11 +5,14 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -95,6 +98,13 @@ public class ConferencesView extends Composite<VerticalLayout> {
         grid.addColumn(Conference::getDuration).setHeader("Duration");
         grid.addColumn(Conference::getRoom).setHeader("Room");
 
+        grid.addColumn(new ComponentRenderer<>( conference -> {
+            return new Span(((Conference)conference).getBook().getTitle());
+        })).setHeader("Book");
+        grid.addColumn(new ComponentRenderer<>( conference -> {
+            return new Span(((Conference)conference).getSpeaker().getName());
+        })).setHeader("Speaker");
+
         grid.getColumns().forEach( column -> column.setSortable(true) );
 
         return grid;
@@ -150,6 +160,7 @@ public class ConferencesView extends Composite<VerticalLayout> {
         row.add(textFieldConference);
         row.add(textFieldTitle);
         row.add(datePickerDate);
+        row.add(textFieldYoutube);
 
         return row;
     }
@@ -157,7 +168,6 @@ public class ConferencesView extends Composite<VerticalLayout> {
     private HorizontalLayout getRow2ConferenceFields(){
         HorizontalLayout row = Views.getNewRow();
 
-        row.add(textFieldYoutube);
         row.add(textFieldContent);
         row.add(integerFieldDuration);
         row.add(textFieldRoom);
