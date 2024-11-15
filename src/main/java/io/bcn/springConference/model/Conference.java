@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +26,7 @@ public class Conference {
     private UUID id;
     private String conference;
     private String title;
-    private Date date;
+    private LocalDate date;
     private String youtube;
     private String content;
     private int duration;

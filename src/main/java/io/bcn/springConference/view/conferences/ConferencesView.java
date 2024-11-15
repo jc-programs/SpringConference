@@ -12,6 +12,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import io.bcn.springConference.model.Conference;
+import io.bcn.springConference.repository.ConferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Conferences")
@@ -19,10 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Menu(order = 3, icon = "line-awesome/svg/pencil-ruler-solid.svg")
 public class ConferencesView extends Composite<VerticalLayout> {
 
-
     @Autowired
-    conferenceRepository conferenceRepository;
-
+    ConferenceRepository conferenceRepository;
+/*
     private final Grid<Conference> conferencesGrid;
 
     private final TextField textFieldConference;
@@ -75,4 +75,6 @@ public class ConferencesView extends Composite<VerticalLayout> {
                 }
         );
     }
+
+ */
 }
