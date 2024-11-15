@@ -2,6 +2,8 @@ package io.bcn.springConference.view.books;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -21,6 +23,7 @@ import io.bcn.springConference.utilities.Views;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -53,8 +56,8 @@ public class BooksView extends Composite<VerticalLayout> {
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
         getContent().add(booksGrid);
-        getContent().add(getRowBookFields());
-        getContent().add(getRowBookButtons());
+        getContent().add(new Hr());
+        getContent().add(getBookForm());
 
         binder = new Binder<>(Book.class);
         binder.bind(textFieldAuthor, Book::getAuthor, Book::setAuthor);
@@ -114,28 +117,22 @@ public class BooksView extends Composite<VerticalLayout> {
         binder.setBean(new Book());
     }
 
-
-    private HorizontalLayout getRowBookFields(){
-        HorizontalLayout row = Views.getNewRow();
-
-        row.add(textFieldTitle);
-        row.add(textFieldAuthor);
-        row.add(textFieldISBN);
-
-        return row;
-    }
-
-    private HorizontalLayout getRowBookButtons() {
-        HorizontalLayout row = Views.getNewRow();
+    private FormLayout getBookForm(){
+        FormLayout form = new FormLayout();
 
         Button buttonSave = new Button("Insert / Update", clickEvent -> { saveBook(); });
         Button buttonDelete = new Button("Delete", clickEvent -> { deleteBook(); });
+        HorizontalLayout row = Views.getNewRow();
+        row.setMargin(true);
+        row.add(buttonSave,buttonDelete);
 
-        row.add(buttonSave);
-        row.add(buttonDelete);
+        List<FormLayout.ResponsiveStep> steps =  Views.getResponsiveStepsForForms();
+        form.setResponsiveSteps(steps);
+        form.add(textFieldTitle, textFieldAuthor, textFieldISBN, row);
+        // force buttons in one line
+        form.setColspan(row, steps.size());
 
-        return row;
+        return form;
     }
-
 
 }

@@ -2,8 +2,10 @@ package io.bcn.springConference.view.speakers;
 
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -12,6 +14,8 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.PostConstruct;
+
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -50,8 +54,8 @@ public class SpeakersView extends Composite<VerticalLayout> {
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
         getContent().add(speakersGrid);
-        getContent().add(getRowSpeakerFields());
-        getContent().add(getRowSpeakerButtons());
+        getContent().add(new Hr());
+        getContent().add(getSpeakerForm());
 
         binder = new Binder<>(Speaker.class);
         binder.bind(textFieldName, Speaker::getName, Speaker::setName);
@@ -111,26 +115,22 @@ public class SpeakersView extends Composite<VerticalLayout> {
         binder.setBean(new Speaker());
     }
 
-    private HorizontalLayout getRowSpeakerFields(){
-        HorizontalLayout row = Views.getNewRow();
-
-        row.add(textFieldName);
-        row.add(textFieldBio);
-        row.add(textFieldEmail);
-
-        return row;
-    }
-
-    private HorizontalLayout getRowSpeakerButtons() {
-        HorizontalLayout row = Views.getNewRow();
+    private FormLayout getSpeakerForm(){
+        FormLayout form = new FormLayout();
 
         Button buttonSave = new Button("Insert / Update", clickEvent -> { saveSpeaker(); });
         Button buttonDelete = new Button("Delete", clickEvent -> { deleteSpeaker(); });
+        HorizontalLayout row = Views.getNewRow();
+        row.setMargin(true);
+        row.add(buttonSave,buttonDelete);
 
-        row.add(buttonSave);
-        row.add(buttonDelete);
+        List<FormLayout.ResponsiveStep> steps =  Views.getResponsiveStepsForForms();
+        form.setResponsiveSteps(steps);
+        form.add(textFieldName, textFieldBio, textFieldEmail, row);
+        // force buttons in one line
+        form.setColspan(row, steps.size());
 
-        return row;
+        return form;
     }
 
 }

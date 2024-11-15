@@ -3,8 +3,10 @@ package io.bcn.springConference.view.conferences;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -27,6 +29,7 @@ import io.bcn.springConference.utilities.Views;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.UUID;
 
 @PageTitle("Conferences")
@@ -84,9 +87,8 @@ public class ConferencesView extends Composite<VerticalLayout> {
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
         getContent().add(conferencesGrid);
-        getContent().add(getRow1ConferenceFields());
-        getContent().add(getRow2ConferenceFields());
-        getContent().add(getRowConferenceButtons());
+        getContent().add(new Hr());
+        getContent().add(getConferenceForm());
 
         binder = new Binder<>(Conference.class, true);
         binder.bind(textFieldConference, Conference::getConference, Conference::setConference);
@@ -189,6 +191,25 @@ public class ConferencesView extends Composite<VerticalLayout> {
         binder.setBean(new Conference());
     }
 
+    private FormLayout getConferenceForm(){
+        FormLayout form = new FormLayout();
+
+        Button buttonSave = new Button("Insert / Update", clickEvent -> { saveConference(); });
+        Button buttonDelete = new Button("Delete", clickEvent -> { deleteConference(); });
+        HorizontalLayout row = Views.getNewRow();
+        row.setMargin(true);
+        row.add(buttonSave,buttonDelete);
+
+        List<FormLayout.ResponsiveStep> steps =  Views.getResponsiveStepsForForms();
+        form.setResponsiveSteps(steps);
+        form.add(textFieldConference, textFieldTitle, datePickerDate, textFieldYoutube);
+        form.add(textFieldContent, integerFieldDuration, textFieldRoom);
+        form.add(selectBook, selectSpeaker, row);
+        // force buttons in one line
+        form.setColspan(row, steps.size());
+
+        return form;
+    }
 
     private HorizontalLayout getRow1ConferenceFields(){
         HorizontalLayout row = Views.getNewRow();
