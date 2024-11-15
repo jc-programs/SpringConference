@@ -17,6 +17,7 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import io.bcn.springConference.model.Book;
 import io.bcn.springConference.repository.BookRepository;
+import io.bcn.springConference.utilities.Views;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -114,21 +115,8 @@ public class BooksView extends Composite<VerticalLayout> {
     }
 
 
-    private HorizontalLayout  getNewRow(){
-        HorizontalLayout layoutRow = new HorizontalLayout();
-
-        layoutRow.setWidthFull();
-        layoutRow.addClassName(LumoUtility.Gap.MEDIUM);
-        layoutRow.setWidth("100%");
-        layoutRow.setHeight("min-content");
-        layoutRow.setAlignItems(Alignment.CENTER);
-        layoutRow.setJustifyContentMode(JustifyContentMode.CENTER);
-
-        return layoutRow;
-    }
-
     private HorizontalLayout getRowBookFields(){
-        HorizontalLayout row = getNewRow();
+        HorizontalLayout row = Views.getNewRow();
 
         row.add(textFieldTitle);
         row.add(textFieldAuthor);
@@ -138,7 +126,7 @@ public class BooksView extends Composite<VerticalLayout> {
     }
 
     private HorizontalLayout getRowBookButtons() {
-        HorizontalLayout row = getNewRow();
+        HorizontalLayout row = Views.getNewRow();
 
         Button buttonSave = new Button("Insert / Update", clickEvent -> { saveBook(); });
         Button buttonDelete = new Button("Delete", clickEvent -> { deleteBook(); });

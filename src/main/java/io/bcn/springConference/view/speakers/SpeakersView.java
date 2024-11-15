@@ -4,7 +4,6 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -12,13 +11,15 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
-import io.bcn.springConference.model.Speaker;
-import io.bcn.springConference.repository.SpeakerRepository;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.UUID;
+import io.bcn.springConference.model.Speaker;
+import io.bcn.springConference.repository.SpeakerRepository;
+
+
+import io.bcn.springConference.utilities.Views;
 
 @PageTitle("Speakers")
 @Route("speakers")
@@ -110,22 +111,8 @@ public class SpeakersView extends Composite<VerticalLayout> {
         binder.setBean(new Speaker());
     }
 
-
-    private HorizontalLayout  getNewRow(){
-        HorizontalLayout layoutRow = new HorizontalLayout();
-
-        layoutRow.setWidthFull();
-        layoutRow.addClassName(LumoUtility.Gap.MEDIUM);
-        layoutRow.setWidth("100%");
-        layoutRow.setHeight("min-content");
-        layoutRow.setAlignItems(FlexComponent.Alignment.CENTER);
-        layoutRow.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-
-        return layoutRow;
-    }
-
     private HorizontalLayout getRowSpeakerFields(){
-        HorizontalLayout row = getNewRow();
+        HorizontalLayout row = Views.getNewRow();
 
         row.add(textFieldName);
         row.add(textFieldBio);
@@ -135,7 +122,7 @@ public class SpeakersView extends Composite<VerticalLayout> {
     }
 
     private HorizontalLayout getRowSpeakerButtons() {
-        HorizontalLayout row = getNewRow();
+        HorizontalLayout row = Views.getNewRow();
 
         Button buttonSave = new Button("Insert / Update", clickEvent -> { saveSpeaker(); });
         Button buttonDelete = new Button("Delete", clickEvent -> { deleteSpeaker(); });
