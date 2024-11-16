@@ -79,7 +79,8 @@ public class ConferencesView extends Composite<VerticalLayout> {
 
         selectBook = new Select<>();
         selectBook.setLabel("Book");
-        selectBook.setItemLabelGenerator(Book::getTitle);
+        // selectBook.setItemLabelGenerator(Book::getTitle);
+        selectBook.setRenderer( Views.getBookRender() );
         selectSpeaker = new Select<>();
         selectSpeaker.setLabel("Speaker");
         selectSpeaker.setItemLabelGenerator(Speaker::getName);

@@ -1,9 +1,13 @@
 package io.bcn.springConference.utilities;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import io.bcn.springConference.model.Book;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,5 +47,25 @@ public class Views {
         );
     }
 
+    public static ComponentRenderer<FlexLayout, Book> getBookRender(){
+        return new ComponentRenderer<>(
+                book -> {
+                    FlexLayout wrapper = new FlexLayout();
+                    wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
 
+                    Div info = new Div();
+                    info.setText(book.getTitle());
+
+                    Div author = new Div();
+                    author.setText(book.getAuthor());
+                    author.getStyle().set("font-size", "var(--lumo-font-size-s)");
+                    author.getStyle().set("color", "var(--lumo-secondary-text-color)");
+                    info.add(author);
+
+                    wrapper.add(info);
+
+                    return wrapper;
+                }
+        );
+    }
 }
