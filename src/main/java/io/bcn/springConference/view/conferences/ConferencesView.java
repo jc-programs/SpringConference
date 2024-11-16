@@ -30,6 +30,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @PageTitle("Conferences")
@@ -67,6 +68,9 @@ public class ConferencesView extends Composite<VerticalLayout> {
         textFieldConference = new TextField("Conference");
         textFieldTitle = new TextField("Title");
         datePickerDate = new DatePicker("Date");
+        // YYYY-MM-DD format
+        // https://stackoverflow.com/questions/61384400/format-date-in-vaadin-date-picker
+        datePickerDate.setLocale(Locale.CANADA_FRENCH);
         textFieldYoutube = new TextField("Youtube");
         textFieldContent = new TextField("Content");
         integerFieldDuration = new IntegerField("Duration");
