@@ -1,5 +1,6 @@
 package io.bcn.springConference.utilities;
 
+import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -8,8 +9,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import io.bcn.springConference.model.Book;
+import io.bcn.springConference.model.Speaker;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,6 +64,30 @@ public class Views {
                     info.add(author);
 
                     wrapper.add(info);
+
+                    return wrapper;
+                }
+        );
+    }
+
+    public static ComponentRenderer<FlexLayout, Speaker> getSpeakerRender(){
+        return new ComponentRenderer<>(
+                speaker -> {
+                    FlexLayout wrapper = new FlexLayout();
+                    wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
+
+                    Avatar avatar = new Avatar(speaker.getName());
+//                    Image image = new Image();
+//                    image.setSrc(person.getPictureUrl());
+//                    image.setAlt("Portrait of " + person.getFirstName() + " "
+//                            + person.getLastName());
+//                    image.setWidth("var(--lumo-size-m)");
+//                    image.getStyle().set("margin-right", "var(--lumo-space-s)");
+
+                    Div info = new Div();
+                    info.setText(speaker.getName());
+
+                    wrapper.add(avatar,info);
 
                     return wrapper;
                 }

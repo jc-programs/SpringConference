@@ -83,7 +83,8 @@ public class ConferencesView extends Composite<VerticalLayout> {
         selectBook.setRenderer( Views.getBookRender() );
         selectSpeaker = new Select<>();
         selectSpeaker.setLabel("Speaker");
-        selectSpeaker.setItemLabelGenerator(Speaker::getName);
+        // selectSpeaker.setItemLabelGenerator(Speaker::getName);
+        selectSpeaker.setRenderer(Views.getSpeakerRender());
 
         conferencesGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
         conferencesGrid.setWidth("100%");
