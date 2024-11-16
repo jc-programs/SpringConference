@@ -6,8 +6,11 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -132,12 +135,14 @@ public class ConferencesView extends Composite<VerticalLayout> {
         grid.addColumn(Conference::getDuration).setHeader("Duration");
         grid.addColumn(Conference::getRoom).setHeader("Room");
 
-        grid.addColumn(new ComponentRenderer<>( conference -> {
-            return new Span(((Conference)conference).getBook().getTitle());
-        })).setHeader("Book");
-        grid.addColumn(new ComponentRenderer<>( conference -> {
-            return new Span(((Conference)conference).getSpeaker().getName());
-        })).setHeader("Speaker");
+//        grid.addColumn(new ComponentRenderer<>( conference -> {
+//            return new Span(((Conference)conference).getBook().getTitle());
+//        })).setHeader("Book");
+        grid.addColumn(Views.getConferenceBookRender()).setHeader("Book");
+//        grid.addColumn(new ComponentRenderer<>( conference -> {
+//            return new Span(((Conference)conference).getSpeaker().getName());
+//        })).setHeader("Speaker");
+        grid.addColumn(Views.getConferenceSpeakerRender()).setHeader("Speaker");
 
         grid.getColumns().forEach( column -> column.setSortable(true) );
 

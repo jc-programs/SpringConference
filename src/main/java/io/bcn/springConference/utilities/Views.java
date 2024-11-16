@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import io.bcn.springConference.model.Book;
+import io.bcn.springConference.model.Conference;
 import io.bcn.springConference.model.Speaker;
 
 import java.util.Arrays;
@@ -48,35 +49,45 @@ public class Views {
         );
     }
 
+    private static FlexLayout getBookLayoutRender(Book book){
+        FlexLayout wrapper = new FlexLayout();
+        wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        Div info = new Div();
+        info.setText(book.getTitle());
+
+        Div author = new Div();
+        author.setText(book.getAuthor());
+        author.getStyle().set("font-size", "var(--lumo-font-size-s)");
+        author.getStyle().set("color", "var(--lumo-secondary-text-color)");
+        info.add(author);
+
+        wrapper.add(info);
+
+        return wrapper;
+    }
+
     public static ComponentRenderer<FlexLayout, Book> getBookRender(){
-        return new ComponentRenderer<>(
+        return new ComponentRenderer<FlexLayout, Book>(
                 book -> {
-                    FlexLayout wrapper = new FlexLayout();
-                    wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
-
-                    Div info = new Div();
-                    info.setText(book.getTitle());
-
-                    Div author = new Div();
-                    author.setText(book.getAuthor());
-                    author.getStyle().set("font-size", "var(--lumo-font-size-s)");
-                    author.getStyle().set("color", "var(--lumo-secondary-text-color)");
-                    info.add(author);
-
-                    wrapper.add(info);
-
-                    return wrapper;
+                    return getBookLayoutRender(book);
                 }
         );
     }
 
-    public static ComponentRenderer<FlexLayout, Speaker> getSpeakerRender(){
-        return new ComponentRenderer<>(
-                speaker -> {
-                    FlexLayout wrapper = new FlexLayout();
-                    wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
+    public static ComponentRenderer<FlexLayout, Conference> getConferenceBookRender(){
+        return new ComponentRenderer<FlexLayout, Conference>(
+                conference -> {
+                    return getBookLayoutRender(conference.getBook());
+                }
+        );
+    }
 
-                    Avatar avatar = new Avatar(speaker.getName());
+    private static FlexLayout getSpeakerLayoutRender(Speaker speaker){
+        FlexLayout wrapper = new FlexLayout();
+        wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        Avatar avatar = new Avatar(speaker.getName());
 //                    Image image = new Image();
 //                    image.setSrc(person.getPictureUrl());
 //                    image.setAlt("Portrait of " + person.getFirstName() + " "
@@ -84,12 +95,26 @@ public class Views {
 //                    image.setWidth("var(--lumo-size-m)");
 //                    image.getStyle().set("margin-right", "var(--lumo-space-s)");
 
-                    Div info = new Div();
-                    info.setText(speaker.getName());
+        Div info = new Div();
+        info.setText(speaker.getName());
 
-                    wrapper.add(avatar,info);
+        wrapper.add(avatar,info);
 
-                    return wrapper;
+        return wrapper;
+    }
+
+    public static ComponentRenderer<FlexLayout, Speaker> getSpeakerRender(){
+        return new ComponentRenderer<FlexLayout, Speaker>(
+                speaker -> {
+                    return getSpeakerLayoutRender(speaker);
+                }
+        );
+    }
+
+    public static ComponentRenderer<FlexLayout, Conference> getConferenceSpeakerRender(){
+        return new ComponentRenderer<FlexLayout, Conference>(
+                conference -> {
+                    return getSpeakerLayoutRender(conference.getSpeaker());
                 }
         );
     }
