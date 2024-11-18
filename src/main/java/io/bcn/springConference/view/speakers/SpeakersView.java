@@ -8,6 +8,7 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Menu;
@@ -37,14 +38,16 @@ public class SpeakersView extends Composite<VerticalLayout> {
 
     private final TextField textFieldName;
     private final TextField textFieldBio;
-    private final TextField textFieldEmail;
+    // private final TextField textFieldEmail;
+    private final EmailField email;
 
     private final Binder<Speaker> binder;
 
     public SpeakersView() {
         textFieldName = new TextField("Name");
         textFieldBio = new TextField("Bio");
-        textFieldEmail = new TextField("Email");
+        // textFieldEmail = new TextField("Email");
+        email = new EmailField("Email");
         speakersGrid = new Grid<>(Speaker.class);
 
         speakersGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
@@ -60,7 +63,7 @@ public class SpeakersView extends Composite<VerticalLayout> {
         binder = new Binder<>(Speaker.class);
         binder.bind(textFieldName, Speaker::getName, Speaker::setName);
         binder.bind(textFieldBio, Speaker::getBio, Speaker::setBio);
-        binder.bind(textFieldEmail, Speaker::getEmail, Speaker::setEmail);
+        binder.bind(email, Speaker::getEmail, Speaker::setEmail);
 
         speakersGrid.asSingleSelect().addValueChangeListener(
                 event ->{
@@ -126,7 +129,7 @@ public class SpeakersView extends Composite<VerticalLayout> {
 
         List<FormLayout.ResponsiveStep> steps =  Views.getResponsiveStepsForForms();
         form.setResponsiveSteps(steps);
-        form.add(textFieldName, textFieldBio, textFieldEmail, row);
+        form.add(textFieldName, textFieldBio, email, row);
         // force buttons in one line
         form.setColspan(row, steps.size());
 
